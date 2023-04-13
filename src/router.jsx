@@ -23,7 +23,7 @@ const router = createBrowserRouter(createRoutesFromElements(
       <Route path="register" element={<SignUp />} />
     </Route>
 
-    <Route path="/" element={<BasicLayout />}>
+    <Route path="/" element={<NavbarLayout />}>
       <Route element={<ProtectedRoute />}>
         <Route index path="users" element={<Users />} />
       </Route>

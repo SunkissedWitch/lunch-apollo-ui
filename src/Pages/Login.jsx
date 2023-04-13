@@ -1,20 +1,24 @@
 import React from 'react';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import LoginGradient from '../Components/backgrounds/gradient';
 import { useForm } from "react-hook-form";
-import { LockClosedIcon } from '@heroicons/react/24/solid'
+import axios from '../services/axiosInstance';
+import { LOCAL_STORAGE_TOKEN_NAME } from '../config';
 
 const Login = () => {
   const location = useLocation();
   const from = location.state?.from || "/";
   const { register, handleSubmit } = useForm();
+  const navigate = useNavigate()
 
-  const onSubmit = (data, e) => {
-    console.log('[submit]: ', data, e);
+  const onSubmit = async (data, e) => {
+    const response = await axios.post(`/users/login`, data)
+    console.log('response', response)
     // TODO: send request to API /users/login
-    // if (response.access_token) {
-    //   return navigate('/users');
-    // }
+    if (response.data.token) {
+      localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, response.data.token)
+      return navigate('/users');
+    }
   }
   const onError = (errors, e) => console.log(errors, e);
 
@@ -42,7 +46,7 @@ const Login = () => {
                   required
                   className="relative block w-full rounded-t-md border-0 py-3 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   placeholder="Email address"
-                  {...register('username')}
+                  {...register('email')}
                 />
               </div>
               <div>
@@ -87,7 +91,7 @@ const Login = () => {
                 className="group relative flex w-full justify-center rounded-md bg-indigo-600 py-4 px-3 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 <span className="absolute inset-y-0 right-0 flex items-center pr-4">
-                  <LockClosedIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
+                  {/* <LockClosedIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" /> */}
                 </span>
                 Login
               </button>
@@ -95,43 +99,6 @@ const Login = () => {
           </form>
         </div>
       </div>
-      {/* <div className="fixed left-0 top-0 h-full w-full bg-black/75 -z-10"></div> */}
-      {/* <section className='flex justify-center flex-col px-4 py-14 z-50'>
-        <div className='max-w-[450px] w-full mx-auto'>
-          <div className='py-10 px-5 lg:px-10'>
-            {
-              location.state?.message &&
-              <h3 className="text-red-600 text-center mb-2">
-                {location.state.message}
-              </h3>
-            }
-
-            <h1 className='mb-6 font-bold text-center uppercase text-xl'>
-              Login
-            </h1>
-
-            <form className='flex flex-col w-full' onSubmit={handleSubmit}>
-              <div className='mb-5'>
-                <p className=' mb-2'>Email</p>
-
-                <input type="text" className='w-full p-2 ' placeholder='email' />
-              </div>
-
-              <div className='mb-5'>
-                <p className=' mb-2'>Password</p>
-
-                <input type="password" className='w-full p-2' placeholder='password' />
-              </div>
-
-              <div className='mt-7'>
-                <button type="submit" className='bg-red-700 py-2 font-bold px-4 hover:bg-red-500 w-full'>
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </section> */}
     </>
   );
 }
