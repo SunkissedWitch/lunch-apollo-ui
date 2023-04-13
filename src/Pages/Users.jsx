@@ -18,10 +18,10 @@ const UserRow = ({ email, username, office = 'Default', totalOrders = '0' }) => 
       </div>
     </td>
     <td>
-      <span className="badge badge-ghost badge-sm">{totalOrders}</span>
+      <span className="badge badge-ghost badge-sm font-mono">{totalOrders}</span>
     </td>
     <th className='text-right'>
-      <button className="btn btn-primary btn-xs">details</button>
+      <button className="btn btn-primary btn-sm">details</button>
     </th>
   </tr>
 }
