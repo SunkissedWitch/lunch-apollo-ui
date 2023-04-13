@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router';
 import LoginGradient from '../Components/backgrounds/gradient';
 import { useForm } from "react-hook-form";
-import { LockClosedIcon } from '@heroicons/react/20/solid'
+import { LockClosedIcon } from '@heroicons/react/24/solid'
 
 const Login = () => {
   const location = useLocation();
