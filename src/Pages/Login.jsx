@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router';
+import { NavLink } from 'react-router-dom';
 
 const handleSubmit = (event) => {
   event.preventDefault();
@@ -13,7 +14,8 @@ const Login = () => {
   return (
     <>
       <div className="fixed left-0 top-0 h-full w-full bg-black/75 -z-10"></div>
-      <section className='flex justify-center flex-col px-4 py-14 z-50'>
+      
+      <section className='h-screen flex justify-center flex-col px-4 py-14 z-50'>
         <div className='max-w-[450px] w-full mx-auto bg-black/80 text-white'>
           <div className='py-10 px-5 lg:px-10'>
             {
@@ -46,6 +48,12 @@ const Login = () => {
                 </button>
               </div>
             </form>
+
+            <div className="pt-5 text-center">
+              <NavLink to="/register" className="link">
+                Go to Sing up
+              </NavLink>
+            </div>
           </div>
         </div>
       </section>

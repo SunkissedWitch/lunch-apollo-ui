@@ -5,15 +5,7 @@ const menuItems = [
   {
     title: 'Users',
     to: '/users'
-  },
-  {
-    title: 'Login',
-    to: '/login'
-  },
-  {
-    title: 'Sing Up',
-    to: '/register'
-  },
+  }
 ];
 
 const Navbar = () => {
@@ -50,7 +42,6 @@ const Navbar = () => {
           </ul>
         </div>
       </div>
-
     </div>
   );
 }

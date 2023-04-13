@@ -15,13 +15,14 @@ import Home from './Pages/Home';
 
 const router = createBrowserRouter(createRoutesFromElements(
   <>
-    <Route path="/" element={<BaseLayout />}>
-      <Route index element={<Home />} />
-      <Route path="login" element={<Login />} />
-      <Route path="register" element={<SignUp />} />
+    <Route path="/" element={<Login />} />
+    <Route path="login" element={<Login />} />
+    <Route path="register" element={<SignUp />} />
 
-      <Route element={<ProtectedRoute />}>
-        <Route index path="users" element={<Users />} />
+    <Route element={<ProtectedRoute />}>
+      <Route element={<BaseLayout />}>
+        <Route index path="/home" element={<Home />}></Route>
+        <Route path="/users" element={<Users />}></Route>
       </Route>
     </Route>
 
