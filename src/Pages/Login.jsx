@@ -12,9 +12,9 @@ const Login = () => {
 
   return (
     <>
-      <div className="fixed left-0 top-0 h-full w-full bg-black/75 -z-10"></div>
+      {/* <div className="fixed left-0 top-0 h-full w-full bg-black/75 -z-10"></div> */}
       <section className='flex justify-center flex-col px-4 py-14 z-50'>
-        <div className='max-w-[450px] w-full mx-auto bg-black/80 text-white'>
+        <div className='max-w-[450px] w-full mx-auto'>
           <div className='py-10 px-5 lg:px-10'>
             {
               location.state?.message &&
@@ -29,15 +29,15 @@ const Login = () => {
 
             <form className='flex flex-col w-full' onSubmit={handleSubmit}>
               <div className='mb-5'>
-                <p className='text-white mb-2'>Email</p>
+                <p className=' mb-2'>Email</p>
 
-                <input type="text" className='w-full p-2 text-black' placeholder='email' />
+                <input type="text" className='w-full p-2 ' placeholder='email' />
               </div>
 
               <div className='mb-5'>
-                <p className='text-white mb-2'>Password</p>
+                <p className=' mb-2'>Password</p>
 
-                <input type="password" className='w-full p-2 text-black' placeholder='password' />
+                <input type="password" className='w-full p-2' placeholder='password' />
               </div>
 
               <div className='mt-7'>
