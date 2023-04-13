@@ -1,8 +1,9 @@
 import React from "react"
 import { Outlet, Navigate, useLocation } from "react-router-dom"
+import { TOKEN_NAME } from "../helpers/const"
 
 const ProtectedRoute = () => {
-  const isLoggedIn = localStorage.getItem("loggedin")
+  const isLoggedIn = localStorage.getItem(TOKEN_NAME);
   const location = useLocation();
 
   if (isLoggedIn) {
