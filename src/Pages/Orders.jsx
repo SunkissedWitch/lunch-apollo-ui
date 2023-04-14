@@ -7,18 +7,18 @@ const fetcher = async (url) => {
   return data
 }
 
-const UserRow = ({ email, username, office = 'Default', orders: totalOrders = '0' }) => {
-  return <tr key={email}>
+const OrderRow = ({ id, text, price, user: { username } }) => {
+  return <tr key={id}>
     <td>
       <div className="flex items-center space-x-3">
         <div>
-          <div className="font-bold">{username}</div>
-          <div className="text-sm opacity-50">{email}</div>
+          <div className="font-bold">{text}</div>
+          <div className="text-sm opacity-50">{price}</div>
         </div>
       </div>
     </td>
     <td>
-      <span className="badge badge-ghost badge-sm font-mono">{totalOrders}</span>
+      <span className="badge badge-ghost badge-sm font-mono">{username}</span>
     </td>
     <th className='text-right'>
       <button className="btn btn-primary btn-sm">details</button>
@@ -26,9 +26,9 @@ const UserRow = ({ email, username, office = 'Default', orders: totalOrders = '0
   </tr>
 }
 
-const Users = () => {
-  const { data: users, error, isLoading } = useSWR('/users', fetcher)
-  console.log('[users]: ', error, isLoading, users)
+const Orders = () => {
+  const { data: orders, error, isLoading } = useSWR('/orders', fetcher)
+  console.log('[orders]: ', error, isLoading, orders)
 
   if (error) return <div>failed to load</div>
   if (isLoading) return <div>loading...</div>
@@ -40,14 +40,14 @@ const Users = () => {
           {/* head */}
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Total Orders</th>
+              <th>Order</th>
+              <th>User</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => 
-              <UserRow {...user} />
+            {orders.map((order) => 
+              <OrderRow {...order} />
             )}
           </tbody>
         </table>
@@ -56,4 +56,4 @@ const Users = () => {
   );
 }
 
-export default Users;
+export default Orders;

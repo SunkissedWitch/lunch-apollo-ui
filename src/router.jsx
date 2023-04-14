@@ -14,6 +14,7 @@ import Page_404 from "./Pages/Page_404";
 import Users from './Pages/Users';
 import Home from './Pages/Home';
 import BasicLayout from './Layouts/BasicLayout';
+import Orders from './Pages/Orders';
 
 const router = createBrowserRouter(createRoutesFromElements(
   <>
@@ -26,6 +27,7 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<NavbarLayout />}>
       <Route element={<ProtectedRoute />}>
         <Route index path="users" element={<Users />} />
+        <Route index path="orders" element={<Orders />} />
       </Route>
     </Route>
 
