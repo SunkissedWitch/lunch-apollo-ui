@@ -10,44 +10,38 @@ const fetcher = async (url) => {
 const OrderRow = ({ id, text, price, user: { username } }) => {
   return <tr key={id}>
     <td>
-      <div className="flex items-center space-x-3">
-        <div>
-          <div className="font-bold">{text}</div>
-          <div className="text-sm opacity-50">{price}</div>
-        </div>
-      </div>
+      {text}
+    </td>
+    <td className='font-mono'>
+      {price}
     </td>
     <td>
       <span className="badge badge-ghost badge-sm font-mono">{username}</span>
     </td>
-    <th className='text-right'>
-      <button className="btn btn-primary btn-sm">details</button>
-    </th>
   </tr>
 }
 
 const Orders = () => {
   const { data: orders, error, isLoading } = useSWR('/orders', fetcher)
-  console.log('[orders]: ', error, isLoading, orders)
 
   if (error) return <div>failed to load</div>
   if (isLoading) return <div>loading...</div>
 
   return (
     <div>
-      <div className="overflow-x-auto w-full">
-        <table className="table w-full">
+      <div className="overflow-x-auto w-full shadow">
+        <table className="table table-compact w-full">
           {/* head */}
           <thead>
             <tr>
               <th>Order</th>
+              <th>Price</th>
               <th>User</th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => 
-              <OrderRow {...order} />
+            {orders.map((order, index) => 
+              <OrderRow key={`order-${index}`} {...order} />
             )}
           </tbody>
         </table>

@@ -8,7 +8,7 @@ const fetcher = async (url) => {
 }
 
 const UserRow = ({ email, username, office = 'Default', orders: totalOrders = '0' }) => {
-  return <tr key={email}>
+  return <tr>
     <td>
       <div className="flex items-center space-x-3">
         <div>
@@ -28,14 +28,13 @@ const UserRow = ({ email, username, office = 'Default', orders: totalOrders = '0
 
 const Users = () => {
   const { data: users, error, isLoading } = useSWR('/users', fetcher)
-  console.log('[users]: ', error, isLoading, users)
 
   if (error) return <div>failed to load</div>
   if (isLoading) return <div>loading...</div>
 
   return (
     <div>
-      <div className="overflow-x-auto w-full">
+      <div className="overflow-x-auto w-full shadow">
         <table className="table w-full">
           {/* head */}
           <thead>
@@ -46,8 +45,8 @@ const Users = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => 
-              <UserRow {...user} />
+            {users.map((user, index) =>
+              <UserRow key={`user-${index}`} {...user} />
             )}
           </tbody>
         </table>

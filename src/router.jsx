@@ -15,6 +15,7 @@ import Users from './Pages/Users';
 import Home from './Pages/Home';
 import BasicLayout from './Layouts/BasicLayout';
 import Orders from './Pages/Orders';
+import Pool from './Pages/Pool';
 
 const router = createBrowserRouter(createRoutesFromElements(
   <>
@@ -28,6 +29,7 @@ const router = createBrowserRouter(createRoutesFromElements(
       <Route element={<ProtectedRoute />}>
         <Route index path="users" element={<Users />} />
         <Route index path="orders" element={<Orders />} />
+        <Route index path="pool" element={<Pool />} />
       </Route>
     </Route>
 
