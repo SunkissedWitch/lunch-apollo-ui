@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import axios from '../../services/axiosInstance'
+import { _axios } from '../../services/axiosInstance'
 
 const PollCard = ({ id, dateStart, dueDate, isClosed, available_restaurants: options }) => {
   const [answer, setAnswer] = useState(1)
@@ -14,7 +14,7 @@ const PollCard = ({ id, dateStart, dueDate, isClosed, available_restaurants: opt
   }
   const onAnswer = async () => {
     try {
-      const response = await axios.post(`/polls/${id}/answer`, {
+      const response = await _axios.post(`/polls/${id}/answer`, {
         answer
       })
       console.log('response', response)

@@ -8,6 +8,7 @@ import {
 import NavbarLayout from "./Layouts/NavbarLayout";
 import ProtectedRoute from './Layouts/ProtectedRoute';
 
+import { authLoader } from './loaders/authLoader';
 import Login from './Pages/Login';
 import SignUp from './Pages/SignUp';
 import Page_404 from "./Pages/Page_404";
@@ -20,9 +21,22 @@ import Poll from './Pages/Poll';
 const router = createBrowserRouter(createRoutesFromElements(
   <>
     <Route element={<BasicLayout />}>
-      <Route index element={<Navigate to="/login" />} />
-      <Route path="login" element={<Login />} />
-      <Route path="register" element={<SignUp />} />
+      <Route
+        index
+        loader={authLoader}
+        element={<Navigate to="/login" />}
+      />
+
+      <Route
+        path="login"
+        element={<Login />}
+        loader={authLoader}
+      />
+      <Route
+        path="register"
+        element={<SignUp />}
+        loader={authLoader}
+      />
     </Route>
 
     <Route path="/" element={<NavbarLayout />}>

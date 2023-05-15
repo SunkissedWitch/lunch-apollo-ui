@@ -1,11 +1,11 @@
 import React from 'react'
-import axios from '../services/axiosInstance'
+import { _axios } from '../services/axiosInstance'
 import useSWR from 'swr'
 import PollCard from '../Components/Poll/PollCard'
 import dayjs from 'dayjs'
 
 const fetcher = async (url) => {
-  const { data } = await axios.get(url)
+  const { data } = await _axios.get(url)
   return data
 }
 
@@ -39,14 +39,14 @@ const Poll = () => {
           </div>
         </div>
         <div className='flex flex-col gap-3 mt-3'>
-          <PollCard {...firstPoll}/>
+          <PollCard {...firstPoll} />
         </div>
       </>
-    );  
+    );
   }
 
   // ToDo: додати стилі + логіку вибору та відображення конкретного опитування у випадку, коли на день існує декілька опитувань.
-  return(
+  return (
     <div className='bg-neutral p-4 rounded-md text-white mx-auto w-fit'>
       <div className='text-center'>
         <p>За сьогодні є кілька опитуваннь. Яке саме ви хочете подивитись?</p>

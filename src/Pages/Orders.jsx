@@ -1,11 +1,6 @@
 import React from 'react'
-import axios from '../services/axiosInstance'
+import { fetcher } from '../services/axiosInstance'
 import useSWR from 'swr'
-
-const fetcher = async (url) => {
-  const { data } = await axios.get(url)
-  return data
-}
 
 const OrderRow = ({ id, text, price, user: { username } }) => {
   return <tr key={id}>
@@ -40,7 +35,7 @@ const Orders = () => {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order, index) => 
+            {orders.map((order, index) =>
               <OrderRow key={`order-${index}`} {...order} />
             )}
           </tbody>

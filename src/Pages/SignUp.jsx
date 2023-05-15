@@ -2,10 +2,15 @@ import React, { useState } from 'react'
 import { useForm } from "react-hook-form";
 import FormAlert from '../Components/Custom/FormAlert';
 import { EMAIL_VALIDATION } from '../helpers/const';
-import { _axios } from '../helpers/fetcher';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import LoginGradient from '../Components/backgrounds/gradient';
+import { _axios } from '../services/axiosInstance';
+import { LOCAL_STORAGE_USER } from '../config';
 
 const SignUp = () => {
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
@@ -15,41 +20,54 @@ const SignUp = () => {
   const onSubmit = (data) => {
     console.log('submitted', data);
 
+    _axios.post('/users/create', data)
+      .then(res => {
+        if (res.status === 200) {
+          const { message, user } = res.data;
 
-    // _axios.post('/users/create', JSON.stringify(data))
-    //   .then(res => {
-    //     console.log(res);
-    //   })
+          // localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, token);
+          localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify(user));
+
+          toast.success(message, {
+            autoClose: 500,
+            onClose: () => navigate('/', { replace: true })
+          })
+        }
+      }).catch(e => {
+        const { message } = e.response.data
+
+        toast.error(message, {
+          autoClose: 1500,
+        })
+      });
   };
+  const onError = (errors, e) => console.log(errors, e);
 
   return (
     <>
-      <div className="fixed left-0 top-0 h-full w-full bg-black/75 -z-10"></div>
+      <ToastContainer />
 
-      {/* <div className="toast toast-top toast-center w-full max-w-sm">
-        <div className="alert alert-success">
-          <div className="font-medium">
-            <span>Message sent successfully.</span>
-          </div>
-        </div>
-      </div> */}
+      <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <LoginGradient />
 
-      <section className='flex justify-center flex-col px-4 py-14 z-50 h-screen'>
-        <div className='max-w-[450px] w-full mx-auto bg-black/80 text-white'>
-          <div className='py-10 px-5 lg:px-10'>
-            <h1 className='mb-6 font-bold text-center uppercase text-xl'>
-              Sign Up
-            </h1>
+        <div className="w-full max-w-md space-y-8">
+          <h2 className="mt-6 text-center text-3xl font-medium tracking-tight text-gray-900">
+            Register
+          </h2>
 
-            <form className='flex flex-col w-full' onSubmit={handleSubmit(onSubmit)}>
-              <div className='mb-5'>
-                <p className='text-white mb-2'>Email</p>
-
+          <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit, onError)} noValidate>
+            <div className="-space-y-px rounded-md shadow-sm">
+              <div className="">
+                <label htmlFor="email-address" className="sr-only">
+                  Email address
+                </label>
                 <input
-                  type="text"
-                  className='w-full p-2 text-black'
-                  placeholder='email'
+                  id="email-address"
                   name="email"
+                  type="email"
+                  autoComplete="email"
+                  className="relative block w-full rounded-t-md border-0 py-3 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  placeholder="Email address"
                   {...register("email", { required: true, pattern: EMAIL_VALIDATION })}
                 />
 
@@ -57,49 +75,58 @@ const SignUp = () => {
                 {errors.email?.type === 'pattern' && <FormAlert text="Please provide valid email" />}
               </div>
 
-              <div className='mb-5'>
-                <p className='text-white mb-2'>Password</p>
-
+              <div>
+                <label htmlFor="password" className="sr-only">
+                  Password
+                </label>
                 <input
-                  type="password"
-                  className='w-full p-2 text-black'
-                  placeholder='password'
+                  id="password"
                   name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  className="relative block w-full border-0 py-3 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  placeholder="Password"
                   {...register("password", { required: true })}
                 />
 
                 {errors.password?.type === 'required' && <FormAlert text="Password is required" />}
               </div>
 
-              <div className='mb-5'>
-                <p className='text-white mb-2'>Username</p>
-
+              <div>
+                <label htmlFor="password" className="sr-only">
+                  Username
+                </label>
                 <input
+                  id="username"
+                  name="username"
                   type="text"
-                  className='w-full p-2 text-black'
-                  placeholder='johndoe'
-                  name='username'
+                  required
+                  className="relative block w-full rounded-b-md border-0 py-3 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  placeholder="Username"
                   {...register("username", { required: true })}
                 />
 
                 {errors.username?.type === 'required' && <FormAlert text="Username is required" />}
               </div>
-
-              <div className='mt-7'>
-                <button type="submit" className='bg-red-700 py-2 font-bold px-4 hover:bg-red-500 w-full'>
-                  Submit
-                </button>
-              </div>
-            </form>
-
-            <div className="pt-5 text-center">
-              <NavLink to="/login" className="link">
-                Go to Login
-              </NavLink>
             </div>
+
+            <div>
+              <button
+                className="group relative flex w-full justify-center rounded-md bg-indigo-600 py-4 px-3 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+
+          <div className="pt-5 text-center">
+            <NavLink to="/login" className="link">
+              Go to login
+            </NavLink>
           </div>
         </div>
-      </section>
+      </div>
     </>
   )
 }

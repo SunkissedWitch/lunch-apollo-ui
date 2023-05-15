@@ -1,11 +1,6 @@
 import React from 'react'
-import axios from '../services/axiosInstance'
+import { fetcher } from '../services/axiosInstance'
 import useSWR from 'swr'
-
-const fetcher = async (url) => {
-  const { data } = await axios.get(url)
-  return data
-}
 
 const UserRow = ({ email, username, office = 'Default', orders: totalOrders = '0' }) => {
   return <tr>

@@ -2,39 +2,63 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import LoginGradient from '../Components/backgrounds/gradient';
 import { useForm } from "react-hook-form";
-import axios from '../services/axiosInstance';
-import { LOCAL_STORAGE_TOKEN_NAME } from '../config';
+import { _axios } from '../services/axiosInstance';
+import { LOCAL_STORAGE_TOKEN_NAME, LOCAL_STORAGE_USER } from '../config';
+import { EMAIL_VALIDATION } from '../helpers/const';
+import FormAlert from '../Components/Custom/FormAlert';
+import { NavLink } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Login = () => {
   const location = useLocation();
   const from = location.state?.from || "/";
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm();
   const navigate = useNavigate()
+  const fromUrl = location.state?.from || "/";
 
-  const onSubmit = async (data, e) => {
-    const response = await axios.post(`/users/login`, data)
-    console.log('response', response)
-    // TODO: send request to API /users/login
-    if (response.data.token) {
-      localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, response.data.token)
-      return navigate('/users');
-    }
+  const onSubmit = (data, e) => {
+    _axios.post('/users/login', data)
+      .then(res => {
+        if (res.status === 200) {
+          const { token, user } = res.data;
+
+          localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, token);
+          localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify(user));
+
+          toast.success("Succses!", {
+            autoClose: 500,
+            onClose: () => navigate(fromUrl, { replace: true })
+          })
+        }
+      }).catch(e => {
+        const { message } = e.response.data
+
+        toast.error(message, {
+          autoClose: 1500,
+        })
+      });
   }
   const onError = (errors, e) => console.log(errors, e);
 
   return (
     <>
-    <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <ToastContainer />
+
+      <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <LoginGradient />
+
         <div className="w-full max-w-md space-y-8">
-          <div>
-            <h2 className="mt-6 text-center text-3xl font-medium tracking-tight text-gray-900">
-              Login
-            </h2>
-          </div>
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit, onError)}>
+          <h2 className="mt-6 text-center text-3xl font-medium tracking-tight text-gray-900">
+            Login
+          </h2>
+
+          <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit, onError)} noValidate>
             <div className="-space-y-px rounded-md shadow-sm">
-              <div>
+              <div className="">
                 <label htmlFor="email-address" className="sr-only">
                   Email address
                 </label>
@@ -43,12 +67,15 @@ const Login = () => {
                   name="email"
                   type="email"
                   autoComplete="email"
-                  required
                   className="relative block w-full rounded-t-md border-0 py-3 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   placeholder="Email address"
-                  {...register('email')}
+                  {...register("email", { required: true, pattern: EMAIL_VALIDATION })}
                 />
+
+                {errors.email?.type === 'required' && <FormAlert text="Email is required" />}
+                {errors.email?.type === 'pattern' && <FormAlert text="Please provide valid email" />}
               </div>
+
               <div>
                 <label htmlFor="password" className="sr-only">
                   Password
@@ -61,8 +88,10 @@ const Login = () => {
                   required
                   className="relative block w-full rounded-b-md border-0 py-3 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   placeholder="Password"
-                  {...register('password')}
+                  {...register("password", { required: true })}
                 />
+
+                {errors.password?.type === 'required' && <FormAlert text="Password is required" />}
               </div>
             </div>
 
@@ -97,6 +126,12 @@ const Login = () => {
               </button>
             </div>
           </form>
+
+          <div className="pt-5 text-center">
+            <NavLink to="/register" className="link">
+              Go to Sing up
+            </NavLink>
+          </div>
         </div>
       </div>
     </>
