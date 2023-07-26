@@ -4,7 +4,7 @@ import { _axios } from '../../services/axiosInstance'
 const PollCard = ({ id, dateStart, dueDate, isClosed, available_restaurants: options }) => {
   const [answer, setAnswer] = useState(1)
   const handleChange = (event) => {
-    console.log('event', event.target.value)
+    console.log('event handleChange', event.target.value)
     setAnswer(event.target.value)
   }
 
